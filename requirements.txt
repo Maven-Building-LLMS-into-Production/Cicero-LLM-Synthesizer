@@ -1,0 +1,7 @@
+fastapi==0.92.0
+gradio>=3.35.2
+pandas>=2.0.2
+setuptools==67.6.1
+torch==2.0.0
+tqdm==4.65.0
+uvicorn==0.20.0
