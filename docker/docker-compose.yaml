@@ -12,7 +12,7 @@ services:
     container_name: "cicero-synthesizer-local-dev"
     environment:
       DOCKER_BUILDKIT_VALUE: ${DOCKER_BUILDKIT_VALUE}
-      HUGGINGFACE_TOKEN: ${HUGGINGFACE_TOKEN}
+      HUGGING_FACE_HUB_TOKEN: ${HUGGING_FACE_HUB_TOKEN}
     volumes:
       - ${HOME}/.ssh:/root/.ssh
       - /var/run/docker.sock:/var/run/docker.sock
