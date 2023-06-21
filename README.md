@@ -93,7 +93,6 @@ One can see all of the available options by:
     requirements              Install Python dependencies into the Python environment
     show-params               Show the set of input parameters
     sort-requirements         Sort the project packages requirements file
-    test                      Run all Python unit tests with verbose output and logs
 ```
 
 > **NOTE**: If you're using `Windows`, you may have to copy and modify to some
