@@ -2,6 +2,21 @@
 
 # Cicero LLM Synthesizer
 
+## GPT3.5 summaries
+
+To generate the GPT3.5 summaries for all articles, use the following commands:
+
+```
+cd src
+python3 -m utils.gpt35_summaries.cleanup_and_summarize
+```
+
+The output CSV file is placed in `src/utils/gpt35_summaries/df_embed_out.csv`
+The pre-generated summaries for all articles are in `df_embed_out2.csv` in the same directory.
+
+For an example of a focussed summary, please see `src/focused_summary_example.py`.
+
+
 This app
 
 ## Contents
@@ -125,7 +140,7 @@ make docker-local-dev-login
 
 ```bash
 # Log into the container
-➜$: make docker-local-dev-login
+???$: make docker-local-dev-login
 direnv: error /opt/program/.envrc is blocked. Run `direnv allow` to approve its content
 ```
 > One will see the `direnv` error because `direnv` is installed and one must
