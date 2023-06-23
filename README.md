@@ -14,6 +14,8 @@ python3 -m utils.gpt35_summaries.cleanup_and_summarize
 The output CSV file is placed in `src/utils/gpt35_summaries/df_embed_out.csv`
 The pre-generated summaries for all articles are in `df_embed_out2.csv` in the same directory.
 
+For an example of a focussed summary, please see `src/focused_summary_example.py`.
+
 
 This app
 

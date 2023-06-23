@@ -30,7 +30,7 @@ class Summarizer:
             self.prompt_template
         )
 
-    def _get_prompt_template(self) -> str:
+    def _get_prompt_template(self, search_string=None) -> str:
         # Defining the template to use
         template_text = """
     Create a concise, clear, and in-depth summary of the following online article. Adhere to the following guidelines:
@@ -40,6 +40,12 @@ class Summarizer:
 the events or concepts, when things happened, and, if this information is
 available, why.
     3. The summary should be between one and three paragraphs.
+"""
+        if search_string:
+            template_text += f"""
+    4. Make sure to include and emphasize any information in the article that 
+relates to the following search string:
+"{search_string}"
     """
 
         return template_text
@@ -67,6 +73,7 @@ available, why.
     def _run_model(
         self,
         user_content: str,
+        search_string: Optional[str] = None,
         temperature: Optional[float] = 1,
     ):
         """
@@ -94,7 +101,7 @@ available, why.
         }
         # Composing the input messages
         messages = [
-            {"role": "system", "content": self.prompt_template},
+            {"role": "system", "content": self._get_prompt_template(search_string)},
             {"role": "user", "content": user_content},
         ]
         # Parsing the request data
@@ -119,10 +126,11 @@ available, why.
                 f"HTTP request failed code {response.status_code}, {response.text}"
             )
 
-    def summarize(self, title, content):
+    def summarize(self, title, content, search_string=None):
         content_for_summary = f"{title}\n\n{content}"
+        prompt_token_length = self.prompt_token_length if search_string else self._get_number_of_tokens(self._get_prompt_template(search_string))
         data_token_length = self._get_number_of_tokens(content_for_summary)
-        while data_token_length + self.prompt_token_length > self.max_tokens - 10:
+        while data_token_length + prompt_token_length > self.max_tokens - 10:
             print("Decimating the content.")
             content = content.split()
             del content[::10]
@@ -132,6 +140,6 @@ available, why.
 
         while True:
             try:
-                return self._run_model(user_content=content_for_summary)
+                return self._run_model(user_content=content_for_summary, search_string=search_string)
             except Exception as e:
                 print(e, file=sys.stderr)
