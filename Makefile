@@ -21,6 +21,13 @@ REQUIREMENTS_DEV_FILE_TEMP = $(PROJECT_DIR)/requirements-dev.tmp
 REQUIREMENTS_DEPLOYMENT_FILE = $(PROJECT_DIR)/requirements-deploy.txt
 REQUIREMENTS_DEPLOYMENT_FILE_TEMP = $(PROJECT_DIR)/requirements-deploy.tmp
 
+# --- PATHS TO PROJECT DIRECTOIRES
+DATA_DIRECTORY = $(PROJECT_DIR)/data
+SRC_DIRECTORY = $(PROJECT_DIR)/src
+API_DIRECTORY = $(SRC_DIRECTORY)/api
+DATA_PROCESSING_DIRECTORY = $(SRC_DIRECTORY)/data_processing
+TRAINING_DIRECTORY = $(SRC_DIRECTORY)/training
+
 # -- Docker-related
 # Variable used for turning on/off Docker Buildkit
 DOCKER_BUILDKIT_VALUE=1
@@ -388,6 +395,18 @@ add-licenses:
 ## Open up all web endpoints
 all-web: api-web app-app-web
 	@	echo "All web endpoints opened!"
+
+###############################################################################
+# PROJECT AND DATA FUNCTIONS                                                  #
+###############################################################################
+
+DATASET_PATH="https://raw.githubusercontent.com/hamzafarooq/maven-mlsystem-design-cohort-1/main/data/df_embed.csv"
+
+## Run the data preparation on the input dataset
+prepare_data:
+	@	$(PYTHON_INTERPRETER) \
+		$(DATA_PROCESSING_DIRECTORY)/prepare_dataset.py \
+		--dataset-path $(DATASET_PATH)
 
 ###############################################################################
 # Self Documenting Commands                                                   #

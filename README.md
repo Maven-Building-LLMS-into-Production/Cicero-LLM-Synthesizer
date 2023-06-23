@@ -105,6 +105,7 @@ One can see all of the available options by:
     pip-upgrade               Upgrade the version of the 'pip' package
     pre-commit-install        Installing the pre-commit Git hook
     pre-commit-uninstall      Uninstall the pre-commit Git hook
+    prepare_data              Run the data preparation on the input dataset
     requirements              Install Python dependencies into the Python environment
     show-params               Show the set of input parameters
     sort-requirements         Sort the project packages requirements file
