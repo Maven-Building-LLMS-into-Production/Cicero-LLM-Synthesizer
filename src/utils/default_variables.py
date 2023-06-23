@@ -29,3 +29,19 @@ save_to_disk = True
 
 # URL to the CICERO dataset
 cicero_dataset_url = "https://raw.githubusercontent.com/hamzafarooq/maven-mlsystem-design-cohort-1/main/data/df_embed.csv"  # noqa: E501
+
+# Option for saving to disk
+save_to_disk = True
+
+# Name of the column that corresponds to the Document ID
+document_id_colname = "_id"
+
+# Name of the column that corresponds to the title of the document.
+title_colname = "title"
+
+# Name of the column that contains the content of the document.
+content_colname = "content"
+
+# Name of teh target column name that will contain the parsed / clean version
+# of the document's content.
+clean_content_colname = "clean_content"
