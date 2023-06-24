@@ -36,7 +36,7 @@ LOCAL_DEVELOPMENT_DIR_PATH="$(PROJECT_DIR)/docker"
 # -- API-related
 INPUT_APP_PORT=7860
 OUTPUT_APP_PORT=7860
-APP_WEBSERVER_URL="http://localhost:$(INPUT_APP_PORT)"
+API_WEBSERVER_URL="http://localhost:$(INPUT_APP_PORT)"
 
 # -- App-related
 APP_SERVER_PORT=8501
@@ -344,7 +344,7 @@ api-stop:
 
 ## Open API in web browser
 api-web:
-	@	python -m webbrowser "$(APP_WEBSERVER_URL)/docs"
+	@	python -m webbrowser "$(API_WEBSERVER_URL)/docs"
 
 ###############################################################################
 # Docker Commands - App-related                                               #
