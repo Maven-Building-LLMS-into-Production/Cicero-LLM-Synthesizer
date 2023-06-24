@@ -61,6 +61,8 @@ services:
     container_name: "cicero-synthesizer-app"
     environment:
       APP_SERVER_PORT: ${APP_SERVER_PORT}
+      HUGGING_FACE_HUB_TOKEN: ${HUGGING_FACE_HUB_TOKEN}
+      HUGGING_FACE_USERNAME: ${HUGGING_FACE_USERNAME}
     volumes:
       - ..:/opt/ml
     ports:

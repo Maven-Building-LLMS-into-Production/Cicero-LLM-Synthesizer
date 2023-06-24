@@ -101,4 +101,4 @@ ENV PYTHONPATH="${PROGRAM_DIR}:${PYTHONPATH}"
 
 WORKDIR ${PROJECT_DIR}
 
-CMD ["uvicorn", "src.api.index:app", "--host", "0.0.0.0","--port", "80"]
+CMD ["uvicorn", "src.api.index:app", "--host", "0.0.0.0","--port", "7860"]

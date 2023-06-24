@@ -160,4 +160,8 @@ semantic_search_engine = gr.Interface(
 # ----------------------------- RUNNING APP -----------------------------------
 
 if __name__ == "__main__":
-    semantic_search_engine.launch(debug=True)
+    semantic_search_engine.launch(
+        debug=False,
+        share=False,
+        server_port=7860,
+    )
