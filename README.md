@@ -91,6 +91,7 @@ One can see all of the available options by:
     pre-commit-uninstall      Uninstall the pre-commit Git hook
     prepare_data              Run the data preparation on the input dataset
     requirements              Install Python dependencies into the Python environment
+    run_faiss_and_embeddings  Run the script for creating a FAISS index and text embeddings of the dataset
     show-params               Show the set of input parameters
     sort-requirements         Sort the project packages requirements file
 ```
