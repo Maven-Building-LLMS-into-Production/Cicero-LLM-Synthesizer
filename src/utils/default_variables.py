@@ -45,3 +45,18 @@ content_colname = "content"
 # Name of teh target column name that will contain the parsed / clean version
 # of the document's content.
 clean_content_colname = "clean_content"
+
+# Name of the 'raw' dataset
+raw_dataset_name = "cicero_raw_dataset"
+
+# Name of the 'clean' dataset
+clean_dataset_name = "cicero_clean_dataset"
+
+# Name of the dataset with summaries
+summaries_dataset_name = "cicero_dataset_with_summaries"
+
+# Name of the environment variable with the HuggingFace Token
+hugging_face_token_name = "HUGGING_FACE_HUB_TOKEN"
+
+# Name of the environment variable with the HuggingFace Username
+hugging_face_username_name = "HUGGING_FACE_USERNAME"

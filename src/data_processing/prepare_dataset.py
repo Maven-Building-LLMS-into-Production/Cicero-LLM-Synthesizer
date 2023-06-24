@@ -137,6 +137,18 @@ def main(params_dict: Dict):
     logger.info(f"\n>>> Raw dataset: \n{data_prep_obj.raw_dataset}\n")
     logger.info(f"\n>>> Clean dataset: \n{clean_dataset}\n")
 
+    # --- Pushing datasets to HuggingFace Hub
+    # 'Raw' dataset
+    data_prep_obj.push_dataset_to_hub(
+        dataset=data_prep_obj.raw_dataset,
+        dataset_name=dv.raw_dataset_name,
+    )
+    # 'Clean' dataset
+    data_prep_obj.push_dataset_to_hub(
+        dataset=clean_dataset,
+        dataset_name=dv.clean_dataset_name,
+    )
+
     return
 
 
