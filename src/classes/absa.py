@@ -327,8 +327,8 @@ class ABSAnalyzer(object):
         # Creating the batches of data to pass to the model
         batches = [
             (
-                repeated_summaries[i : i + self.batch_size],
-                repeated_aspects[i : i + self.batch_size],
+                repeated_summaries[i : i + self.batch_size],  # noqa E203
+                repeated_aspects[i : i + self.batch_size],  # noqa E203
             )
             for i in range(0, len(repeated_summaries), self.batch_size)
         ]
