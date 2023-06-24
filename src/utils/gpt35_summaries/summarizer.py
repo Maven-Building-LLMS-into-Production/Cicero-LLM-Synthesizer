@@ -1,10 +1,9 @@
-import os
 import json
+import os
 import sys
-from typing import List, Optional
+from typing import Optional
 
 import requests
-
 import tiktoken
 
 
@@ -33,7 +32,8 @@ class Summarizer:
     def _get_prompt_template(self, search_string=None) -> str:
         # Defining the template to use
         template_text = """
-    Create a concise, clear, and in-depth summary of the following online article. Adhere to the following guidelines:
+    Create a concise, clear, and in-depth summary of the following online
+    article. Adhere to the following guidelines:
 
     1. Sound professional, detached and avoid emotionally charged language.
     2. Make sure to describe who is discussed in the article, what are
@@ -43,7 +43,7 @@ available, why.
 """
         if search_string:
             template_text += f"""
-    4. Make sure to include and emphasize any information in the article that 
+    4. Make sure to include and emphasize any information in the article that
 relates to the following search string:
 "{search_string}"
     """
@@ -101,7 +101,10 @@ relates to the following search string:
         }
         # Composing the input messages
         messages = [
-            {"role": "system", "content": self._get_prompt_template(search_string)},
+            {
+                "role": "system",
+                "content": self._get_prompt_template(search_string),
+            },
             {"role": "user", "content": user_content},
         ]
         # Parsing the request data
@@ -115,7 +118,7 @@ relates to the following search string:
             self.openai_endpoint,
             headers=headers,
             data=json.dumps(request_data),
-            timeout=60
+            timeout=60,
         )
 
         # Checkig if the response was OK
@@ -123,23 +126,32 @@ relates to the following search string:
             return response.json()["choices"][0]["message"]["content"]
         else:
             raise RuntimeError(
-                f"HTTP request failed code {response.status_code}, {response.text}"
+                f"HTTP request failed {response.status_code}, {response.text}"
             )
 
     def summarize(self, title, content, search_string=None):
         content_for_summary = f"{title}\n\n{content}"
-        prompt_token_length = self.prompt_token_length if search_string else self._get_number_of_tokens(self._get_prompt_template(search_string))
+        prompt_token_length = (
+            self.prompt_token_length
+            if search_string
+            else self._get_number_of_tokens(
+                self._get_prompt_template(search_string)
+            )
+        )
         data_token_length = self._get_number_of_tokens(content_for_summary)
         while data_token_length + prompt_token_length > self.max_tokens - 10:
             print("Decimating the content.")
             content = content.split()
             del content[::10]
-            content = ' '.join(content)
+            content = " ".join(content)
             content_for_summary = f"{title}\n\n{content}"
             data_token_length = self._get_number_of_tokens(content_for_summary)
 
         while True:
             try:
-                return self._run_model(user_content=content_for_summary, search_string=search_string)
+                return self._run_model(
+                    user_content=content_for_summary,
+                    search_string=search_string,
+                )
             except Exception as e:
                 print(e, file=sys.stderr)

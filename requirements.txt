@@ -4,6 +4,7 @@ huggingface_hub>=0.15.1
 pandas>=2.0.2
 setuptools==67.6.1
 spacy>=3.5.3
+tiktoken
 torch==2.0.0
 tqdm==4.65.0
 uvicorn==0.20.0
