@@ -55,8 +55,19 @@ clean_dataset_name = "cicero_clean_dataset"
 # Name of the dataset with summaries
 summaries_dataset_name = "cicero_dataset_with_summaries"
 
+# Name of the dataaset with embeddings and FAISS index
+dataset_faiss_embeddings_name = (
+    "cicero_dataset_with_embeddings_and_faiss_index"
+)
+
 # Name of the environment variable with the HuggingFace Token
 hugging_face_token_name = "HUGGING_FACE_HUB_TOKEN"
 
 # Name of the environment variable with the HuggingFace Username
 hugging_face_username_name = "HUGGING_FACE_USERNAME"
+
+# Name of the HuggingFace repository
+hugging_face_repository_name = "cicero_synthesizer"
+
+# Name of the FAISS Index
+faiss_index_name = "cicero_faiss_index"
