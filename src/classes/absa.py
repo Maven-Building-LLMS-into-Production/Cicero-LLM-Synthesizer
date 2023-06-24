@@ -18,13 +18,15 @@ from transformers import AutoModelForSequenceClassification, AutoTokenizer
 class ABSAnalyzer(object):
     def __init__(self):
         """
-        Class definition for the Aspect-based Sentiment Analysis (ABSA) service.
+        Class definition for the Aspect-based Sentiment Analysis (ABSA)
+        service.
 
         Example:
         ---------
         >>> absa_obj = ABSAnalyzer()
         # Prepare the data for the ABSA service
-        # dataset is a pandas.DataFrame containing the summaries of each article
+        # dataset is a pandas.DataFrame containing the summaries of each
+        # article
         # along with their ids and titles.
         >>> absa_obj.prepare_data(dataset)
         # Use article ids (list of strings) to get the aspect-based sentiment
@@ -176,7 +178,8 @@ class ABSAnalyzer(object):
         logging.info(f">>   Took: {end_time - start_time}")
 
         # --- Reshaping the scores of all batches
-        # NOTE: (N x num_aspects) x num_classes -> N x num_aspects x num_classes
+        # NOTE: (N x num_aspects) x num_classes ->
+        # N x num_aspects x num_classes
         scores_all_batches = scores_all_batches.reshape(
             n_summaries, len(aspects), -1
         )
