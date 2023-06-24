@@ -25,6 +25,7 @@ from typing import Dict, Optional
 
 from datasets import Dataset
 from fastapi import Depends, FastAPI
+from fastapi.responses import RedirectResponse
 from huggingface_hub import hf_hub_download
 from pydantic import BaseModel
 
@@ -153,6 +154,11 @@ def run_semantic_search_task(query: str, number_articles: int) -> Dict:
 
 
 # -------------------------------- ROUTES -------------------------------------
+
+
+@app.get("/", include_in_schema=False)
+async def docs_redirect():
+    return RedirectResponse(url="/docs")
 
 
 # ---- Semantic Search
