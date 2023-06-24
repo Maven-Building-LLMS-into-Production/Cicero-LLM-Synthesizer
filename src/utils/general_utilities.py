@@ -70,11 +70,14 @@ def get_project_paths() -> Dict[str, Path]:
     base_dir = Path(_get_root_dir())
     # Data directory
     data_dir = base_dir.joinpath("data").resolve()
+    # Source directory / Codebase
+    src_dir = base_dir.joinpath("src").resolve()
 
     # --- Creating project dictionary with the project directories
     proj_dict = {
         "base": base_dir,
         "data": data_dir,
+        "src": src_dir,
     }
 
     # --- Making sure the directories exist
