@@ -29,6 +29,9 @@ services:
     # Running the local image
     image: "cicero-synthesizer-api"
     container_name: "cicero-synthesizer-api"
+    environment:
+      HUGGING_FACE_HUB_TOKEN: ${HUGGING_FACE_HUB_TOKEN}
+      HUGGING_FACE_USERNAME: ${HUGGING_FACE_USERNAME}
     volumes:
       - ..:/opt/ml
     ports:

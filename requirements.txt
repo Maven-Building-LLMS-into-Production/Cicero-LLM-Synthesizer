@@ -1,11 +1,14 @@
 datasets>=2.13.1
+faiss-cpu>=1.7.4
 fastapi==0.92.0
 gradio>=3.35.2
 huggingface_hub>=0.15.1
+openai>=0.27.8
 pandas>=2.0.2
+sentence-transformers
 setuptools==67.6.1
 spacy>=3.5.3
-tiktoken
+tiktoken>=0.4.0
 torch==2.0.0
 tqdm==4.65.0
 uvicorn==0.20.0
