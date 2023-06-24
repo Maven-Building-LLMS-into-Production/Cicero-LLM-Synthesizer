@@ -27,11 +27,12 @@ Module that contains the class definitions for the data preparation tasks.
 import logging
 import re
 from datetime import datetime
-from typing import List, Tuple
+from typing import List, Optional, Tuple, Union
 
 import pandas as pd
 from spacy.lang.en.stop_words import STOP_WORDS
 
+from src.classes import hugging_face_utils as hf
 from src.utils import default_variables as dv
 from src.utils import general_utilities as gu
 
@@ -367,3 +368,36 @@ class DatasetPrep(object):
         logger.info(">> Data cleaning process ... DONE")
 
         return dataset_df
+
+    def push_dataset_to_hub(
+        self,
+        dataset: pd.DataFrame,
+        dataset_name: str,
+        username: Optional[Union[None, str]] = None,
+    ):
+        """
+        Method for pushing the ``dataset`` to the HuggingFace's Hub.
+
+        Parameters
+        -------------
+        dataset : pandas.DataFrame
+            Dataset that will be pushed to HuggingFace.
+
+        dataset_name : str
+            Name of the dataset to use.
+
+        username : str, NoneType, optional
+            Us
+        """
+        # Initializing class object
+        hf_obj = hf.DatasetHelper()
+
+        # Transforming dataset type
+        hf_dataset = hf_obj.convert_dataframe_to_dataset(input_df=dataset)
+
+        # Push dataset to hub
+        hf_obj.push_dataset(
+            dataset=hf_dataset,
+            dataset_name=dataset_name,
+            username=username,
+        )
