@@ -2,23 +2,6 @@
 
 # Cicero LLM Synthesizer
 
-## GPT3.5 summaries
-
-To generate the GPT3.5 summaries for all articles, use the following commands:
-
-```
-cd src
-python3 -m utils.gpt35_summaries.cleanup_and_summarize
-```
-
-The output CSV file is placed in `src/utils/gpt35_summaries/df_embed_out.csv`
-The pre-generated summaries for all articles are in `df_embed_out2.csv` in the same directory.
-
-For an example of a focussed summary, please see `src/focused_summary_example.py`.
-
-
-This app
-
 ## Contents
 
 - [Setup](#setup)
@@ -30,6 +13,7 @@ This app
 - [Tests](#tests)
 - [Helpful Commands](#helpful-commands)
 - [VS Code Extensions](#vs-code-extensions)
+- [GPT3.5 summaries](#gpt35-summaries)
 - [Resources](#resources)
 
 ## Setup
@@ -265,6 +249,20 @@ docker ps -a
 To help facilitate local development you can install
 the [Visual Studio Code Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 extension for VS Code. This will allow you to connect to the local development Docker container and more easily develop features.
+
+## GPT3.5 summaries
+
+To generate the GPT3.5 summaries for all articles, use the following commands:
+
+```
+cd src
+python3 -m utils.gpt35_summaries.cleanup_and_summarize
+```
+
+The output CSV file is placed in `src/utils/gpt35_summaries/df_embed_out.csv`
+The pre-generated summaries for all articles are in `df_embed_out2.csv` in the same directory.
+
+For an example of a focussed summary, please see `src/focused_summary_example.py`.
 
 ## Resources
 

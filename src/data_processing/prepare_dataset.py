@@ -114,6 +114,40 @@ def _resolve_input_object_path(object_path: str) -> str:
     )
 
 
+def _temp_create_dataset_with_summaries():
+    """
+    Function to **temporarily** create the Dataset object in HuggingFace
+    using the dataset with summaries for each of the articles.
+
+    Notes
+    --------
+    This is a temporary solution UNTIL the ``Summarizer`` is put in place.
+    """
+    # Path to the dataset
+    dataset_filepath = str(
+        (
+            gu.get_project_paths()
+            .get("src")
+            .joinpath(
+                "utils",
+                "gpt35_summaries",
+                "df_embed_out2.csv",
+            )
+        ).resolve()
+    )
+
+    # Reading in dataset
+    data_prep_obj = dp.DatasetPrep(dataset_path=dataset_filepath)
+
+    # Uploading it to HuggingFace Hub
+    data_prep_obj.push_dataset_to_hub(
+        dataset=data_prep_obj.raw_dataset,
+        dataset_name=dv.summaries_dataset_name,
+    )
+
+    return
+
+
 # ------------------------------ MAIN FUNCTIONS -------------------------------
 
 
@@ -148,6 +182,9 @@ def main(params_dict: Dict):
         dataset=clean_dataset,
         dataset_name=dv.clean_dataset_name,
     )
+
+    # Dataset with summaries
+    _temp_create_dataset_with_summaries()
 
     return
 
