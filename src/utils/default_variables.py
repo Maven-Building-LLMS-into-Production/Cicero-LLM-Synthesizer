@@ -71,3 +71,6 @@ hugging_face_repository_name = "cicero_synthesizer"
 
 # Name of the FAISS Index
 faiss_index_name = "cicero_faiss_index"
+
+# Name of the column that contains the embedding in the dataset
+embeddings_colname = "embeddings"

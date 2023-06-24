@@ -21,10 +21,15 @@
 # SOFTWARE.
 
 import logging
+from typing import Dict, Optional
 
+import numpy as np
+import pandas as pd
 import torch
 from datasets import Dataset
 from sentence_transformers import SentenceTransformer
+
+from src.utils import default_variables as dv
 
 __author__ = ["Victor Calderon"]
 __copyright__ = ["Copyright 2023 Victor Calderon"]
@@ -64,7 +69,12 @@ class SemanticSearchEngine(object):
         )
         self.embeddings_colname = kwargs.get(
             "embeddings_colname",
-            "embeddings",
+            dv.embeddings_colname,
+        )
+
+        # Variables used for running semantic search
+        self.corpus_dataset_with_faiss_index = kwargs.get(
+            "corpus_dataset_with_faiss_index"
         )
 
     def _get_device(self) -> str:
@@ -143,3 +153,97 @@ class SemanticSearchEngine(object):
         )
 
         return corpus_dataset_with_embeddings
+
+    def run_semantic_search(
+        self,
+        query: str,
+        top_n: Optional[int] = 5,
+    ) -> Dict:  # sourcery skip: extract-duplicate-method
+        """
+        Method for running a semantic search on a query after having
+        created the corpus of the text embeddings.
+
+        Parameters
+        --------------
+        query : str
+            Text query to use for searching the database.
+
+        top_n : int, optional
+            Variable corresponding to the 'Top N' values to return based on the
+            similarity score between the input query and the corpus. This
+            variable is set to ``10`` by default.
+
+        Returns
+        ---------
+        match_results : dict
+            Dictionary containing the metadata of each of the articles
+            that were in the Top-N in terms of being most similar to the
+            input query ``query``.
+        """
+        # --- Checking input parameters
+        # 'query' - Type
+        query_type_arr = (str,)
+        if not isinstance(query, query_type_arr):
+            msg = ">> 'query' ({}) is not a valid input type ({})".format(
+                type(query), query_type_arr
+            )
+            logger.error(msg)
+            raise TypeError(msg)
+        # 'top_n' - Type
+        top_n_type_arr = (int,)
+        if not isinstance(top_n, top_n_type_arr):
+            msg = ">> 'top_n' ({}) is not a valid input type ({})".format(
+                type(top_n), top_n_type_arr
+            )
+            logger.error(msg)
+            raise TypeError(msg)
+
+        # 'top_n' - Value
+        if top_n <= 0:
+            msg = f">> 'top_n' ({top_n}) must be larger than '0'!"
+            logger.error(msg)
+            raise ValueError(msg)
+
+        # --- Checking that the encoder has been indexed correctly
+        if self.corpus_dataset_with_faiss_index is None:
+            msg = ">>> The FAISS index was not properly set!"
+            logger.error(msg)
+            raise ValueError(msg)
+
+        # --- Encode the input query and extract the embedding
+        query_embedding = self.embedder.encode(query)
+
+        # --- Extracting the top-N results
+        (
+            scores,
+            results,
+        ) = self.corpus_dataset_with_faiss_index.get_nearest_examples(
+            self.embeddings_colname,
+            query_embedding,
+            k=top_n,
+        )
+
+        # --- Sorting from highest to lowest
+        # NOTE: We need to deconstruct the 'results' to be able to organize
+        # the results
+        parsed_results = pd.DataFrame.from_dict(
+            data=results,
+            orient="columns",
+        )
+        parsed_results.loc[:, "relevance"] = scores
+
+        # Sorting in descending order
+        parsed_results = parsed_results.sort_values(
+            by=["relevance"],
+            ascending=False,
+        ).reset_index(drop=True)
+
+        # Casting data type for the 'relevance'
+        parsed_results.loc[:, "relevance"] = parsed_results["relevance"].apply(
+            lambda x: str(np.round(x, 5))
+        )
+
+        # Only keeping certain columns
+        columns_to_keep = ["_id", "title", "relevance", "content"]
+
+        return parsed_results[columns_to_keep].to_dict(orient="index")
