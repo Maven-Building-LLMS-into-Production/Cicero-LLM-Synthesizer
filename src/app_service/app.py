@@ -21,13 +21,11 @@
 # SOFTWARE.
 
 import logging
-from typing import Dict, Optional
+from typing import Dict
 
+import gradio as gr
 from datasets import Dataset
-from fastapi import Depends, FastAPI
-from fastapi.responses import RedirectResponse
 from huggingface_hub import hf_hub_download
-from pydantic import BaseModel
 
 from src.classes import hugging_face_utils as hf
 from src.classes import semantic_search_engine as ss
@@ -41,7 +39,7 @@ logging.basicConfig(
 logger.setLevel(logging.INFO)
 
 
-# ------------------------------- VARIABLES -----------------------------------
+# ------------------------------ VARIABLES ------------------------------------
 
 APP_TITLE = "Cicero LLM Synthesizer"
 APP_DESCRIPTION = f"""
@@ -51,24 +49,7 @@ Cicero database that are most similar to the user's input query.
 APP_VERSION = "0.1"
 
 
-# ----------------------------- APP-SPECIFIC ----------------------------------
-
-# Defining the appliation value
-app = FastAPI(
-    title=APP_TITLE,
-    description=APP_DESCRIPTION,
-    version=APP_VERSION,
-)
-
-# -------------------------------- CLASSES ------------------------------------
-
-
-class QueryParams(BaseModel):
-    input_query: str
-    number_articles: Optional[int] = 5
-
-
-# ------------------------------- FUNCTIONS -----------------------------------
+# ------------------------------ FUNCTIONS ------------------------------------
 
 
 def download_dataset_and_faiss_index() -> Dataset:
@@ -119,6 +100,7 @@ def download_dataset_and_faiss_index() -> Dataset:
 
 
 def run_semantic_search_task(query: str, number_articles: int) -> Dict:
+    # sourcery skip: remove-unnecessary-cast
     """
     Function to run semantic search on an input query. It will return a
     set of 'Top-N' articles that are most similar to the input query.
@@ -146,37 +128,40 @@ def run_semantic_search_task(query: str, number_articles: int) -> Dict:
     )
 
     # --- Running search on Top-N results
+    number_articles_mod = int(number_articles)
 
-    return semantic_search_obj.run_semantic_search(
+    results = semantic_search_obj.run_semantic_search(
         query=query,
-        top_n=number_articles,
+        top_n=number_articles_mod,
     )
 
-
-# -------------------------------- ROUTES -------------------------------------
-
-
-@app.get("/", include_in_schema=False)
-async def docs_redirect():
-    return RedirectResponse(url="/docs")
+    return list(results.values())
 
 
-# ---- Semantic Search
-@app.post("/predict")
-async def run_semantic_search(query_params: QueryParams = Depends()):
-    """
-    Function to run semantic search on the an input query.
+# --------------------------------- APP ---------------------------------------
 
-    Parameters
-    --------------
-    query : str
-        Input query to use when running the Semantic Search Engine.
+# -- Semantic Search Engine
+semantic_search_engine = gr.Interface(
+    fn=run_semantic_search_task,
+    inputs=[
+        gr.components.Textbox(label="Input Query"),
+        gr.Slider(
+            minimum=1,
+            label="Choose number of documents to retrieve",
+            step=1,
+        ),
+    ],
+    outputs="json",
+    title=APP_TITLE,
+    description=APP_DESCRIPTION,
+)
 
-    number_articles : int
-        Number of articles to return from the Semantic Search.
-    """
 
-    return run_semantic_search_task(
-        query=query_params.input_query,
-        number_articles=query_params.number_articles,
+# ----------------------------- RUNNING APP -----------------------------------
+
+if __name__ == "__main__":
+    semantic_search_engine.launch(
+        debug=False,
+        share=False,
+        server_port=7860,
     )

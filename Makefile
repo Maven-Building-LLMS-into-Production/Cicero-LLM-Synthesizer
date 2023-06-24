@@ -34,12 +34,12 @@ DOCKER_BUILDKIT_VALUE=1
 LOCAL_DEVELOPMENT_DIR_PATH="$(PROJECT_DIR)/docker"
 
 # -- API-related
-INPUT_APP_PORT=7860
-OUTPUT_APP_PORT=7860
+INPUT_APP_PORT=8501
+OUTPUT_APP_PORT=8501
 API_WEBSERVER_URL="http://localhost:$(INPUT_APP_PORT)"
 
 # -- App-related
-APP_SERVER_PORT=8501
+APP_SERVER_PORT=7860
 APP_WEBSERVER_URL="http://localhost:$(APP_SERVER_PORT)"
 
 # ----------------------------- Python-specific -------------------------------
