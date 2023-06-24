@@ -401,12 +401,28 @@ all-web: api-web app-app-web
 ###############################################################################
 
 DATASET_PATH="https://raw.githubusercontent.com/hamzafarooq/maven-mlsystem-design-cohort-1/main/data/df_embed.csv"
+DATASET_WITH_SUMMARIES_NAME="cicero_dataset_with_summaries"
+DATASET_WITH_FAISS_AND_EMBEDDINGS_NAME="cicero_dataset_with_embeddings_and_faiss_index"
+HUGGING_FACE_REPOSITORY_NAME="cicero_synthesizer"
+FAISS_OUTPUT_FILENAME="cicero_faiss_index"
 
 ## Run the data preparation on the input dataset
 prepare_data:
 	@	$(PYTHON_INTERPRETER) \
 		$(DATA_PROCESSING_DIRECTORY)/prepare_dataset.py \
 		--dataset-path $(DATASET_PATH)
+
+
+## Run the script for creating a FAISS index and text embeddings of the dataset
+run_faiss_and_embeddings:
+	@	$(PYTHON_INTERPRETER) \
+		$(TRAINING_DIRECTORY)/create_faiss_corpus_index.py \
+		--dataset-name $(DATASET_WITH_SUMMARIES_NAME) \
+		--output-dataset-name $(DATASET_WITH_FAISS_AND_EMBEDDINGS_NAME) \
+		--repository-name $(HUGGING_FACE_REPOSITORY_NAME) \
+		--faiss-index-name $(FAISS_OUTPUT_FILENAME)
+
+
 
 ###############################################################################
 # Self Documenting Commands                                                   #
