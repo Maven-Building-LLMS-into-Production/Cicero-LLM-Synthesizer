@@ -162,3 +162,7 @@ cython_debug/
 .envrc
 .python-version
 data/
+
+src/utils/gpt35_summaries/df_embed.csv
+src/utils/gpt35_summaries/df_embed_out2.csv
+src/utils/gpt35_summaries/words_alpha.txt

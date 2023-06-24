@@ -29,12 +29,12 @@ import os
 from typing import Dict, Optional, Union
 
 import pandas as pd
-from datasets import Dataset
+from datasets import Dataset, load_dataset
 from huggingface_hub import HfApi
 
 from src.utils import default_variables as dv
 
-__all__ = ["DatasetHelper"]
+__all__ = ["HuggingFaceHelper"]
 
 
 logger = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ logging.basicConfig(level=logging.INFO)
 logger.setLevel(level=logging.INFO)
 
 
-class DatasetHelper(object):
+class HuggingFaceHelper(object):
     """
     Class definition for creating, interacting, and sharing Datasets.
     """
@@ -103,6 +103,73 @@ class DatasetHelper(object):
         """
 
         return Dataset.from_pandas(df=input_df)
+
+    def get_dataset_from_hub(
+        self,
+        dataset_name: str,
+        username: Optional[Union[None, str]] = None,
+        split: Optional[Union[None, str]] = None,
+    ) -> Dataset:
+        # sourcery skip: extract-duplicate-method, use-fstring-for-formatting
+        """
+        Method for extracting the Dataset from HuggingFace.
+
+        Parameters
+        ------------
+        dataset_name : str
+            Name of the dataset to extract from HuggingFace's Hub.
+
+        username : str, NoneType, optional
+            Username to use when extracting the dataset from HuggingFace Hub.
+            This variable is set to ``None`` by default.
+
+        split : str, NoneType, optional
+            Type of ``split`` to load for the Dataset. If ``None``, the
+            method will extract all splits. This variable is set to
+            ``None`` by default.
+
+        Returns
+        --------
+        dataset_obj : datasets.Dataset
+            Variable corresponding to the dataset that was extracted
+            from the HuggingFace Hub.
+        """
+        # 'dataset_name' - Type
+        dataset_name_type_arr = (str,)
+        if not isinstance(dataset_name, dataset_name_type_arr):
+            msg = (
+                ">> 'dataset_name' ({}) is not a valid input type ({})".format(
+                    type(dataset_name),
+                    dataset_name_type_arr,
+                )
+            )
+            logger.error(msg)
+            raise TypeError(msg)
+        # 'username' - Type
+        username_type_arr = (str, type(None))
+        if not isinstance(username, username_type_arr):
+            msg = ">> 'username' ({}) is not a valid input type ({})".format(
+                type(username),
+                username_type_arr,
+            )
+            logger.error(msg)
+            raise TypeError(msg)
+        # 'split' - Type
+        split_type_arr = (str, type(None))
+        if not isinstance(split, split_type_arr):
+            msg = ">> 'split' ({}) is not a valid input type ({})".format(
+                type(split),
+                split_type_arr,
+            )
+            logger.error(msg)
+            raise TypeError(msg)
+
+        # Defining the path to the dataset in HF.
+        dataset_path = (
+            f"{username}/{dataset_name}" if username else dataset_name
+        )
+
+        return load_dataset(dataset_path, split=split)
 
     def push_dataset(
         self,

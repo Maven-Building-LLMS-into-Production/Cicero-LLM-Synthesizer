@@ -390,7 +390,7 @@ class DatasetPrep(object):
             Us
         """
         # Initializing class object
-        hf_obj = hf.DatasetHelper()
+        hf_obj = hf.HuggingFaceHelper()
 
         # Transforming dataset type
         hf_dataset = hf_obj.convert_dataframe_to_dataset(input_df=dataset)
