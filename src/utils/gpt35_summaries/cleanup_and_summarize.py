@@ -1,5 +1,5 @@
+# sourcery skip: use-named-expression
 import csv
-import os
 import sys
 from pathlib import Path
 
@@ -16,9 +16,7 @@ with open(P_SCRIPT_DIR / "html_tags.txt") as f:
         tag = line.strip()
         if tag:
             HTML_STRINGS.append(tag)
-HTML_STRINGS.append("target_blank")
-HTML_STRINGS.append("relnoopen")
-HTML_STRINGS.append("relnofollow")
+HTML_STRINGS.extend(("target_blank", "relnoopen", "relnofollow"))
 HTML_STRINGS = tuple(HTML_STRINGS)
 
 WORDS = set()
@@ -33,42 +31,49 @@ def filter_content(content):
     c_words = content.split()
     c_filt_words = []
     for w in c_words:
-        if not w in WORDS:
+        if w not in WORDS:
             while w.startswith(HTML_STRINGS):
-                smax = ''
+                smax = ""
                 for s in HTML_STRINGS:
-                    if w.startswith(s):
-                        if len(s) > len(smax):
-                            smax = s
-                w = w[len(smax):]
+                    if w.startswith(s) and len(s) > len(smax):
+                        smax = s
+                w = w[len(smax) :]  # noqa: E203
             while w.endswith(HTML_STRINGS):
-                smax = ''
+                smax = ""
                 for s in HTML_STRINGS:
-                    if w.endswith(s):
-                        if len(s) > len(smax):
-                            smax = s
-                w = w[len(smax):]
+                    if w.endswith(s) and len(s) > len(smax):
+                        smax = s
+                w = w[len(smax) :]  # noqa: E203
         if w:
             c_filt_words.append(w)
-    return ' '.join(c_filt_words)
+    return " ".join(c_filt_words)
 
 
 def main():
     DF_EMBED_OUT_DICT = {}
     if (P_SCRIPT_DIR / "df_embed_out.csv").exists():
-        with open(P_SCRIPT_DIR / "df_embed_out.csv", encoding="ascii", errors="ignore") as fin:
+        with open(
+            P_SCRIPT_DIR / "df_embed_out.csv",
+            encoding="ascii",
+            errors="ignore",
+        ) as fin:
             for csv_row in csv.DictReader(fin):
                 DF_EMBED_OUT_DICT[csv_row["_id"]] = csv_row
 
-
     SUMMARIZER = Summarizer()
 
-    with open(P_SCRIPT_DIR / "df_embed.csv", encoding="ascii", errors="ignore") as fin, \
-open(P_SCRIPT_DIR / "df_embed_out.csv", "w", encoding="ascii", errors="ignore") as fout:
+    with open(
+        P_SCRIPT_DIR / "df_embed.csv", encoding="ascii", errors="ignore"
+    ) as fin, open(
+        P_SCRIPT_DIR / "df_embed_out.csv",
+        "w",
+        encoding="ascii",
+        errors="ignore",
+    ) as fout:
         csv_reader = csv.DictReader(fin)
         fieldnames = csv_reader.fieldnames[:]
-        fieldnames.append('summary')
-        fieldnames.append('content_filtered')
+        fieldnames.append("summary")
+        fieldnames.append("content_filtered")
         csv_writer = csv.DictWriter(fout, fieldnames)
         csv_writer.writeheader()
         for csv_row in csv_reader:
@@ -78,14 +83,18 @@ open(P_SCRIPT_DIR / "df_embed_out.csv", "w", encoding="ascii", errors="ignore") 
             if not csv_row["title"] and not csv_row["content"]:
                 csv_row["content"] = csv_row["_id"]
                 csv_row["_id"] = ""
-            content_filtered = filter_content(csv_row['content'])
+            content_filtered = filter_content(csv_row["content"])
             print(content_filtered)
             csv_row["content_filtered"] = content_filtered
-                # input()
-            if not csv_row.get("summary") and (csv_row["title"] or csv_row["content_filtered"]):
+            # input()
+            if not csv_row.get("summary") and (
+                csv_row["title"] or csv_row["content_filtered"]
+            ):
                 print("Running GPT...\n")
                 while True:
-                    summary = SUMMARIZER.summarize(csv_row['title'], content_filtered)
+                    summary = SUMMARIZER.summarize(
+                        csv_row["title"], content_filtered
+                    )
                     if summary:
                         break
                 # input()
