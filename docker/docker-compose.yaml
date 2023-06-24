@@ -66,10 +66,4 @@ services:
     ports:
       - ${APP_SERVER_PORT:-7860}:${APP_SERVER_PORT:-7860}
     working_dir: /opt/ml
-    command:
-      [
-        "python",
-        "src/app_service/app.py",
-        "--server.port",
-        "7860"
-      ]
+    command: [ "python", "src/app_service/app.py" ]
