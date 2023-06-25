@@ -86,9 +86,8 @@ class ABSAnalyzer(object):
         if torch_version >= packaging.version.parse("2.0.0"):
             try:
                 # Trying compilation
-                model_obj = torch.compile(
-                    model_obj, mode=(mode := "reduce-overhead")
-                )
+                mode = "reduce-overhead"
+                model_obj = torch.compile(model_obj, mode=mode)
                 logging.info(f">> Model compiled in {mode} mode!")
             except Exception as e:
                 logging.warning(
