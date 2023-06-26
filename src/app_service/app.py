@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 import logging
+import os
 from typing import Dict
 
 import gradio as gr
@@ -161,7 +162,6 @@ semantic_search_engine = gr.Interface(
 
 if __name__ == "__main__":
     semantic_search_engine.launch(
-        debug=False,
-        share=False,
-        server_port=7860,
+        server_name="0.0.0.0",
+        server_port=os.environ.get("APP_SERVER_PORT", 8001),
     )
