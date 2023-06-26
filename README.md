@@ -1,4 +1,5 @@
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Maven-Building-LLMS-into-Production/Cicero-LLM-Synthesizer/code-linting.yml)
+[![GitHub Workflow Status][GITHUB_BUILD_BADGE]][GITHUB_BUILD_URL]
+[![homepage][HF_BADGE]][APP_URL]
 
 # Cicero LLM Synthesizer
 
@@ -280,3 +281,12 @@ For an example of a focussed summary, please see `src/focused_summary_example.py
 - [pre-commit](https://pre-commit.com)
 - [Python](https://www.python.org/)
 - [tmux](https://github.com/tmux/tmux/wiki/Getting-Started)
+
+
+<!-- Links -->
+
+[HF_BADGE]:  https://img.shields.io/badge/HuggingFace-App-orange
+[APP_URL]:  https://huggingface.co/spaces/caldervf/Cicero_Synthesizer_Space "HuggingFace App"
+
+[GITHUB_BUILD_BADGE]:  https://img.shields.io/github/actions/workflow/status/Maven-Building-LLMS-into-Production/Cicero-LLM-Synthesizer/code-linting.yml
+[GITHUB_BUILD_URL]:  https://github.com/Maven-Building-LLMS-into-Production/Cicero-LLM-Synthesizer/actions "Github Builds"

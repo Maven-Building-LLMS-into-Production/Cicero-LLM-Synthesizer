@@ -23,6 +23,7 @@ ENV HOME_DIR="/root/ml"
 ENV LOCAL_DEV_DIR="docker"
 ENV ALIASES_FILE="/root/aliases.sh"
 ENV DEBIAN_FRONTEND=noninteractive
+ENV APP_SERVER_PORT=${APP_SERVER_PORT:-8001}
 
 # --- Dockerfile Metadata
 LABEL Maintainer="Victor Calderon"
@@ -38,8 +39,7 @@ COPY ${REQUIREMENTS_FILE} "${HOME_DIR}/${REQUIREMENTS_FILE}"
 
 # ---------------------- EXPOSING PORTS FOR APP -------------------------------
 
-EXPOSE 7860
-EXPOSE 8501
+EXPOSE 8001
 
 # --------------------- INSTALLING EXTRA PACKAGES -----------------------------
 # --- Updating packages and installing packages at the system-level
@@ -101,4 +101,5 @@ ENV PYTHONPATH="${PROGRAM_DIR}:${PYTHONPATH}"
 
 WORKDIR ${PROJECT_DIR}
 
-CMD ["uvicorn", "src.api.index:app", "--host", "0.0.0.0","--port", "7860"]
+CMD ["python", "src/app_service/app.py"]
+# CMD ["uvicorn", "src.api.index:app", "--host", "0.0.0.0","--port", "7860"]
